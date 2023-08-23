@@ -53,3 +53,9 @@
     </form>
 </div>
 @endsection
+
+@section('custom_script')
+<script>
+    
+</script>
+@endsection
