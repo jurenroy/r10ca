@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AppearancesLogsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('ca-form');
 });
+
+Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('save.log');
