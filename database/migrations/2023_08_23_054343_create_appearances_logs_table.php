@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('appearances_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('serial_number');
+            $table->string('serial_number')->unique('serial_number');
             $table->string('fullname');
             $table->string('company');
             $table->dateTime('date_from')->nullable();
