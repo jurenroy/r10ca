@@ -19,3 +19,5 @@ Route::get('/', function () {
 });
 
 Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('save.log');
+
+Route::get('/display', [AppearancesLogsController::class, 'generatePDF'])->name('generate.pdf');

@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\AppearancesLog;
+use App\Services\PDFService;
 
 class AppearancesLogsController extends Controller
 {
+    protected $pdfService;
+
+    // Initialize a constructor
+    public function __construct(PDFService $pdfService) {
+        $this->pdfService = $pdfService;
+    }
+
     public function saveLog(Request $request) {
         // Receive and validate the data provided
         $validatedData = $request->validate([
@@ -28,8 +36,13 @@ class AppearancesLogsController extends Controller
         $log->date_to  =   $validatedData['date_to'];
         $log->purpose  =   $validatedData['purpose'];
 
-        $log->save();
+        // $log->save();
 
         return response()->json(["message" => "Hello world"], 200);
+    }
+
+    // Generate PDF functiion
+    public function generatePDF() {
+        $this->pdfService->generatePDF();
     }
 }
