@@ -19,9 +19,11 @@ class AppearancesLog extends Model
             DB::transaction(function () use ($log) {
                 // Fetch the latest serial number avaiable
                 $latestEntry = self::latest()->first();
-                $latestSerialNumber = $latestEntry->serial_number;
 
-                if($latestSerialNumber) {
+                if($latestEntry) {
+                    // Get the latest serial number
+                    $latestSerialNumber = $latestEntry->serial_number;
+
                     // Get the year prefix of the latest serial number
                     $latestSerialNumberYear = substr($latestSerialNumber, 0, 4);
 
