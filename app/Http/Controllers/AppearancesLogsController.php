@@ -20,8 +20,8 @@ class AppearancesLogsController extends Controller
         $validatedData = $request->validate([
             'fullname'  => 'required',
             'company'   => 'required',
-            'date_from' => 'required',
-            'date_to'   => 'required',
+            'date_from' => '',
+            'date_to'   => '',
             'purpose'   => 'required'
         ], [
             'date_from.required'    => 'Date arrived is required.',
@@ -37,14 +37,9 @@ class AppearancesLogsController extends Controller
         $log->purpose       =   $validatedData['purpose'];
 
         if($log->save()) {
-            $this->pdfService->generatePDF($log);
+            $this->pdfService->sendCerficateOfAppearance($log);
         }
         
-        return response()->json(["message" => "Hello world"], 200);
-    }
-
-    // Generate PDF functiion
-    public function generatePDF() {
-        $this->pdfService->generatePDF();
+        return response()->json(["message" => "Save successfully"], 200);
     }
 }

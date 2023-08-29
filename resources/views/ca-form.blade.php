@@ -63,39 +63,68 @@
 @section('custom_script')
 <script>
     $(document).ready(function() {
+        
+        // Perform when form is submitted
         $('#submit').on('click', function() {
-            $.ajax({
-                url: '{{ route('save.log') }}',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    fullname    :   $('#fullname').val(),
-                    company     :   $('#company').val(),
-                    date_from   :   $('#date_from').val(),
-                    date_to     :   $('#date_to').val(),
-                    purpose     :   $('#purpose').val(),
-                    _token      :   '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(error) {
-                    if (error.status == 422) {
-                        var errors = error.responseJSON.errors;
 
-                        // Clear previous error messages
-                        $('.error-message').text('');
+            // Open Modal
+            Swal.fire({
+                title: 'Please wait while saving.....',
+                didOpen: () => {
+                    // Display Loading while saving sequence in progress
+                    Swal.showLoading();
+                    // AJAX Call for saving and sending the CA
+                    $.ajax({
+                        url: '{{ route('save.log') }}',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            fullname    :   $('#fullname').val(),
+                            company     :   $('#company').val(),
+                            date_from   :   $('#date_from').val(),
+                            date_to     :   $('#date_to').val(),
+                            purpose     :   $('#purpose').val(),
+                            _token      :   '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.close();
+                            Swal.fire(
+                                'Save successfully',
+                                'Please get your Certificate of Appearance at the FRONTDESK. Thank you.',
+                                'success'
+                            ).then((result) => {
+                                $('input').val('');
+                            });
+                        },
+                        error: function(error) {
+                            Swal.close();
+                            if (error.status == 422) {
+                                var errors = error.responseJSON.errors;
 
-                        // Display error messages in corresponding input fields
-                        $.each(errors, function(field, messages) {
-                            $('#' +  field + '-error').text(messages[0]);
-                        });
-                    } else {
-                        console.log(error);
-                    }
-                }
+                                // Clear previous error messages
+                                $('.error-message').text('');
+
+                                // Display error messages in corresponding input fields
+                                $.each(errors, function(field, messages) {
+                                    $('#' +  field + '-error').text(messages[0]);
+                                });
+                            } else {
+                                console.log(error);
+                            }
+                        }
+                    });
+                    // End of AJAX Call
+                },
             });
+            // End of Modal
         });
+        // End of button click - Submit
+
+        // Remove error message on change
+        $('form input').on('change', function() {
+            // Clear error messages
+            $(this).parent().children(':last-child').text('');
+        })
     });
 </script>
 @endsection

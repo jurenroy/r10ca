@@ -25,27 +25,27 @@ class AppearancesLog extends Model
                     $latestSerialNumber = $latestEntry->serial_number;
 
                     // Get the year prefix of the latest serial number
-                    $latestSerialNumberYear = substr($latestSerialNumber, 0, 4);
+                    $latestSerialNumberYear = substr($latestSerialNumber, 5);
 
                     // Check if the current year is equal to the latest serial number prefix
                     if($latestSerialNumberYear == date('Y')) {
                         // If true
                         // Increment the sequence by 1
-                        $nextSequenceNumber = substr($latestSerialNumber, Str::length(date('Y') . '-')) + 1;
-                        $newSerialNumber = date('Y') . '-' . str_pad($nextSequenceNumber, 4, '0', STR_PAD_LEFT);
+                        $nextSequenceNumber = substr($latestSerialNumber, 0, 4) + 1;
+                        $newSerialNumber = str_pad($nextSequenceNumber, 4, '0', STR_PAD_LEFT) . '-' . date('Y');
 
                         // Set the new serial number and save
                         $log->serial_number = $newSerialNumber;
                     } else {
                         // If false
                         // Get the current year and restart the sequence to 1
-                        $newSerialNumber = date('Y') . '-' . str_pad(1, 4, 0, STR_PAD_LEFT);
+                        $newSerialNumber = str_pad(1, 4, 0, STR_PAD_LEFT) . '-' . date('Y');
 
                         // Set the new serial number and save
                         $log->serial_number = $newSerialNumber;
                     }
                 } else {
-                    $newSerialNumber = date('Y') . '-' . str_pad(1, 4, '0', STR_PAD_LEFT);
+                    $newSerialNumber = str_pad(1, 4, 0, STR_PAD_LEFT) . '-' . date('Y');
 
                     // Set the new serial number and save
                     $log->serial_number = $newSerialNumber;

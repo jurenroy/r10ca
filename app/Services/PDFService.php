@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Mail\MailHandler;
+use Illuminate\Support\Facades\Mail;
 use TCPDF;
 
 class PDFService
@@ -34,13 +36,18 @@ class PDFService
         return $pdf;
     }
 
+    // Generate PDF
     public function generatePDF($data = null) {
         $pdf = $this->setup();
 
         // Retrived the latest data in database
-        $firstname      = $data['fullname'];
+        $fullname       = $data['fullname'];
         $company        = $data['company'];
-        $date           = $data['date_from'] . 'to' . $data['date_to'];
+        if(is_null($data['date_from']) || is_null($data['date_to'])) {
+            $date       = '';
+        } else {
+            $date       = date_format(date_create($data['date_from']), 'm/d/Y') . ' - ' . date_format(date_create($data['date_to']), 'm/d/Y');
+        }
         $serial_number  = $data['serial_number'];
         $purpose        = $data['purpose'];
 
@@ -146,7 +153,19 @@ class PDFService
         
         $pdf->writeHTMLCell(0, 0, 0.5, 11.41, $text, 0, 1, 0, true, 'l');
 
-        $pdfContent = $pdf->Output('sample.pdf', 'I');
+        $pdfContent = $pdf->Output('sample.pdf', 'S');
         return $pdfContent;
+    }
+
+    // Send PDF
+    public function sendCerficateOfAppearance($logData) {
+        // Generate PDF
+        $pdfContent = $this->generatePDF($logData);
+
+        // Set recipient email
+        $recipientEmail = 'ftaran04@gmail.com';
+        Mail::to($recipientEmail)->send(new MailHandler($pdfContent));
+
+        return "Welcome email sent successfully!";
     }
 }
