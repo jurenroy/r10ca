@@ -19,3 +19,6 @@ Route::get('/', function () {
 });
 
 Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('save.log');
+Route::get('/login', function() {
+    return view('login');
+})->name('login');
