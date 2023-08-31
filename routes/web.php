@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppearancesLogsController;
+use App\Http\Controllers\AuthManager;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +15,21 @@ use App\Http\Controllers\AppearancesLogsController;
 |
 */
 
+// Landing page
 Route::get('/', function () {
     return view('ca-form');
 });
 
 Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('save.log');
-Route::get('/login', function() {
-    return view('login');
-})->name('login');
+// End for Landing page
+
+// Authentication
+Route::get('/login', [AuthManager::class, 'login'])->name('login');
+
+
+// End of Authentication
+
+// Registration
+Route::get('/new-user', [AuthManager::class, 'registration'])->name('registration');
+
+// End of Registration
