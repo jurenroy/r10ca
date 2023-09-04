@@ -23,12 +23,16 @@ Route::get('/', function () {
 Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('save.log');
 // End for Landing page
 
+// Admin
+Route::get('/admin', function() {
+    return view('dashboard');
+})->name('admin.dashboard');
+Route::get('/admin/registration', [AuthManager::class, 'registration'])->name('registration');
+Route::post('/admin/registration', [AuthManager::class, 'registrationProcess'])->name('registration.post');
+// End of Admin
+
 // Authentication
 Route::get('/login', [AuthManager::class, 'login'])->name('login');
 Route::post('/login', [AuthManager::class, 'loginProcess'])->name('login.post');
+Route::get('/logout', [AuthManager::class, 'logout'])->name('logout');
 // End of Authentication
-
-// Registration
-Route::get('/registration', [AuthManager::class, 'registration'])->name('registration');
-Route::post('/registration', [AuthManager::class, 'registrationProcess'])->name('registration.post');
-// End of Registration

@@ -83,13 +83,18 @@
                         dataType: 'json',
                         data: {
                             username    :   $('#username').val(),
-                            password    :   $('#password').val()
+                            password    :   $('#password').val(),
+                            _token      :   '{{ csrf_token() }}'
                         },
                         success: function(response) {
-                            console.log(respobse);
+                            if(response.redirect) {
+                                window.location.href = response.redirect;
+                            } else {
+                                console.log(response);
+                            }
                         },
                         error: function(error) {
-                            console.log(respobse);
+                            console.log(error);
                         }
                     });
                     // End of AJAX call

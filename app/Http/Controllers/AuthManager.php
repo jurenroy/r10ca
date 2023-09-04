@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Models\User;
 
 class AuthManager extends Controller
@@ -15,7 +17,19 @@ class AuthManager extends Controller
 
     // Authenticate Login
     public function loginProcess(Request $request) {
+        // Received and validate the credentials
+        $request->validate([
+            'username'  =>  'required',
+            'password'  =>  'required'
+        ]);
 
+        // Process the validated credentials
+        $credentials = $request->only('username', 'password');
+        if(Auth::attempt($credentials)) {
+            return response()->json(['redirect' => 'admin']);
+        }
+
+        return response()->json(['message' => 'Something went wrong']);
     }
 
     // Registration
@@ -47,5 +61,11 @@ class AuthManager extends Controller
         $user = $userData->save();
 
         return response()->json($user);
+    }
+
+    public function logout() {
+        Session::flush();
+        Auth::logout();
+        return redirect()->intended(route('login'));
     }
 }
