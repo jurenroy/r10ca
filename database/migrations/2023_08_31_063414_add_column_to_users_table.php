@@ -15,7 +15,9 @@ return new class extends Migration
             // Add new columns
             $table->string('middlename')->nullable();
             $table->string('lastname')->nullable();
+            $table->string('suffix')->nullable();
             $table->string('division')->nullable();
+            $table->boolean('first_login')->default(true);
 
             // Rename email to username and name to firstname
             $table->renameColumn('email', 'username');
@@ -30,7 +32,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // Drop columns
-            $table->dropColumn('middlename', 'lastname', 'division');
+            $table->dropColumn('middlename', 'lastname', 'division', 'suffix', 'first_login');
 
             // Rename email to username and name to firstname
             $table->renameColumn('username', 'email');

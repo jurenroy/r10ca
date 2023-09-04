@@ -10,8 +10,8 @@
         @vite('resources/css/app.css')
     </head>
 
-    <body>
-        <section class="h-screen flex justify-center dark:bg-neutral-700">
+    <body class="bg-slate-300 dark:bg-neutral-700">
+        <section class="h-screen flex justify-center">
             <div class="h-full p-10">
                 <div class="flex h-full flex-wrap items-center text-neutral-800 dark:text-neutral-200">
                     <div class="w-[30rem]">
@@ -45,7 +45,7 @@
 
                                             <!--Submit button-->
                                             <div class="mb-12 pb-1 pt-1 text-center">
-                                                <button class="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]" type="button" data-te-ripple-init data-te-ripple-color="light" style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);">Log in</button>
+                                                <button class="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]" type="button" data-te-ripple-init data-te-ripple-color="light" style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);" id="loginBtn" disabled>Log in</button>
 
                                                 <!--Forgot password link-->
                                                 <a href="#!">Forgot password?</a>
@@ -65,7 +65,36 @@
         <script src="{{ asset('vendor/sweetalert/sweetalert.all.js') }}"></script>
         <script>
             $(document).ready(function() {
-                
+                // Check if input is empty
+                $('input').on('keyup', function() {
+                    if($('#username').val() !== '' && $('#password').val() !== '') {
+                        $('#loginBtn').prop("disabled", false);
+                    } else {
+                        $('#loginBtn').prop("disabled", true);
+                    }
+                });
+
+                // When login is click
+                $('#loginBtn').click(function() {
+                    // Make AJAX call for login sequence
+                    $.ajax({
+                        url: '{{ route('login.post') }}',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            username    :   $('#username').val(),
+                            password    :   $('#password').val()
+                        },
+                        success: function(response) {
+                            console.log(respobse);
+                        },
+                        error: function(error) {
+                            console.log(respobse);
+                        }
+                    });
+                    // End of AJAX call
+                });
+                // End of Login button
             });
         </script>
     </body>

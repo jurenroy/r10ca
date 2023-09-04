@@ -25,11 +25,10 @@ Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('s
 
 // Authentication
 Route::get('/login', [AuthManager::class, 'login'])->name('login');
-
-
+Route::post('/login', [AuthManager::class, 'loginProcess'])->name('login.post');
 // End of Authentication
 
 // Registration
-Route::get('/new-user', [AuthManager::class, 'registration'])->name('registration');
-
+Route::get('/registration', [AuthManager::class, 'registration'])->name('registration');
+Route::post('/registration', [AuthManager::class, 'registrationProcess'])->name('registration.post');
 // End of Registration
