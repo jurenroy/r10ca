@@ -55,7 +55,6 @@
 
         <button type="button" class="bg-green-500 hover:bg-red-500 transition-colors duration-300 linear text-white px-4 py-2 rounded-full font-bold" id="submit">Submit Form</button>
 
-
     </form>
 </div>
 @endsection
