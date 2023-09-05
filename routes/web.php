@@ -24,11 +24,13 @@ Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('s
 // End for Landing page
 
 // Admin
-Route::get('/admin', function() {
-    return view('dashboard');
-})->name('admin.dashboard');
-Route::get('/admin/registration', [AuthManager::class, 'registration'])->name('registration');
-Route::post('/admin/registration', [AuthManager::class, 'registrationProcess'])->name('registration.post');
+Route::prefix('admin')->middleware('auth')->group(function() {
+    Route::get('', function() {
+        return view('dashboard');
+    })->name('admin.dashboard');
+    Route::get('/registration', [AuthManager::class, 'registration'])->name('registration');
+    Route::post('/registration', [AuthManager::class, 'registrationProcess'])->name('registration.post');
+});
 // End of Admin
 
 // Authentication

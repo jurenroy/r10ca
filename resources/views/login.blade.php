@@ -76,28 +76,56 @@
 
                 // When login is click
                 $('#loginBtn').click(function() {
-                    // Make AJAX call for login sequence
-                    $.ajax({
-                        url: '{{ route('login.post') }}',
-                        type: 'POST',
-                        dataType: 'json',
-                        data: {
-                            username    :   $('#username').val(),
-                            password    :   $('#password').val(),
-                            _token      :   '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if(response.redirect) {
-                                window.location.href = response.redirect;
-                            } else {
-                                console.log(response);
-                            }
-                        },
-                        error: function(error) {
-                            console.log(error);
+                    Swal.fire({
+                        title: 'Please wait while we verify your account..',
+                        didOpen: () => {
+                            // Display loading
+                            Swal.showLoading()
+                            // Make AJAX call for login sequence
+                            $.ajax({
+                                url: '{{ route('login.post') }}',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    username    :   $('#username').val(),
+                                    password    :   $('#password').val(),
+                                    _token      :   '{{ csrf_token() }}'
+                                },
+                                success: function(response) {
+                                    if(response.redirect) {
+                                        window.location.href = response.redirect;
+                                    } else {
+                                        Swal.close();
+                                        Swal.fire(
+                                            'Incorrect username/password.',
+                                            '',
+                                            'warning'
+                                        ).then((result) => {
+                                            $('#username').val();
+                                            $('#password').val('');
+                                        });
+                                    }
+                                },
+                                error: function(error) {
+                                    Swal.close();
+                                    if (error.status == 422) {
+                                        var errors = error.responseJSON.errors;
+
+                                        // Clear previous error messages
+                                        $('.error-message').text('');
+
+                                        // Display error messages in corresponding input fields
+                                        $.each(errors, function(field, messages) {
+                                            $('#' +  field + '-error').text(messages[0]);
+                                        });
+                                    } else {
+                                        console.log(error);
+                                    }
+                                }
+                            });
+                            // End of AJAX call
                         }
-                    });
-                    // End of AJAX call
+                    })
                 });
                 // End of Login button
             });
