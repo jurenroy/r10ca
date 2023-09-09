@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppearancesLogsController;
 use App\Http\Controllers\AuthManager;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +26,18 @@ Route::post('/save-log', [AppearancesLogsController::class, 'saveLog'])->name('s
 
 // Admin
 Route::prefix('admin')->middleware('auth')->group(function() {
-    Route::get('', function() {
-        return view('dashboard');
-    })->name('admin.dashboard');
+    Route::get('', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/registration', [AuthManager::class, 'registration'])->name('registration');
     Route::post('/registration', [AuthManager::class, 'registrationProcess'])->name('registration.post');
+    
+    // Route for the AJAX call for retrieving list
+    Route::get('/appearance_log', [AdminController::class, 'appearance_log_data'])->name('admin.appearanceLogs');
+
+    // Route for display and print
+    Route::get('/display/{id}', [AdminController::class, 'displayCA'])->name('display.ca');
+    
+    // Route for the graph data
+    Route::get('/get-data', [AdminController::class, 'graphData'])->name('graph.data');
 });
 // End of Admin
 
