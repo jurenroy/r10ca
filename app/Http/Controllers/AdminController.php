@@ -68,9 +68,17 @@ class AdminController extends Controller
             }
 
             array_push($labels, $month);
-            array_push($data, $count)
+            array_push($data, $count);
         }
 
-        dd($appearanceLogs);
+        $datasets = [
+            [
+                'label'             => 'Data',
+                'data'              => $data,
+                'backgroundColor'   => $monthColors
+            ]
+        ];
+
+        return response()->json(['datasets' => $datasets, 'labels' => $labels]);
     }
 }

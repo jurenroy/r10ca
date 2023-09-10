@@ -25,9 +25,19 @@
         </table>
     </div>
 </section>
+
+<section class="h-full m-5 rounded-lg bg-slate-200 dark:bg-neutral-700">
+    <div class="p-2">
+        <h1 class="text-2xl mb-5 text-center font-bold">Cerficate of Appearance Issued FY {{ date('Y') }}</h1>
+
+        <canvas id="logsChart"></canvas>
+    </div>
+</section>
 @endsection
 
 @section('custom_script')
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
     $(document).ready(function() {
         // Set datatable
@@ -57,7 +67,45 @@
                 }
             ]
         });
-        // End of datatable 
+        // End of datatable
+
+        // Chart
+        $.ajax({
+            url: '{{ route('graph.data') }}',
+            type: 'GET',
+            dateType: 'json',
+            success: function(response) {
+                var ctx = document.getElementById('logsChart').getContext('2d');
+                var logsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: response.labels,
+                        datasets: response.datasets
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                    display: false,
+                                },
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    precision: 0, // Set precision to 0 to remove decimal places
+                                }
+                            },
+                        },
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        height: 900,
+                    }
+                });
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        })
+        // End of chart
     });
 </script>
 @endsection
