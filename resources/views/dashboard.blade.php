@@ -3,7 +3,7 @@
 @section('title', 'Welcome ')
 
 @section('content')
-<section class="h-full m-5 rounded-lg bg-slate-200 dark:bg-neutral-700">
+<section class="h-full m-5 rounded-lg bg-slate-200 dark:bg-neutral-200">
     <div class="p-2">
         <h1 class="text-2xl text-center font-bold">Appearance Logs</h1>
 
@@ -26,7 +26,7 @@
     </div>
 </section>
 
-<section class="h-full m-5 rounded-lg bg-slate-200 dark:bg-neutral-700">
+<section class="h-full m-5 rounded-lg bg-slate-200 dark:bg-neutral-200">
     <div class="p-2">
         <h1 class="text-2xl mb-5 text-center font-bold">Cerficate of Appearance Issued FY {{ date('Y') }}</h1>
 
