@@ -9,10 +9,10 @@ use TCPDF;
 class PDFService
 {
     // Setup the page
-    public function setup() {
+    public function setup($userOrientation = 'P') {
         // Create a new TCPDF instance
         $pdf = new TCPDF(
-            $orientation = 'P', 
+            $orientation = $userOrientation, 
             $unit = 'in', 
             $format = 'A4', 
             $unicode = true, 
@@ -285,6 +285,87 @@ class PDFService
         $text = 'MGB-X-FAD-FO-045';
         
         $pdf->writeHTMLCell(0, 0, 0.5, 11.41, $text, 0, 1, 0, true, 'l');
+
+        $pdfContent = $pdf->Output('sample.pdf', 'I');
+        return $pdfContent;
+    }
+
+    // Summary Report
+    public function summaryReport($date_covered, $data) {
+        $pdf = $this->setup('L');
+
+        //Page Header
+        $logo_path = base_path('public/images/mgb-logo-white.jpg');
+        $pdf->Image($logo_path, 0.5, 0.2, 1, '', 'JPG', '', 'T', false, 300, '', false, false, 0 , false, false, false);
+
+        $logo_path = base_path('public/images/NQA_ISO9001_CMYK_UKAS.jpg');
+        $pdf->Image($logo_path, 10.2, 0.3, 1, '', 'JPG', '', 'T', false, 300, '', false, false, 0 , false, false, false);
+
+        $logo_path = base_path('public/images/line-header.jpg');
+        $pdf->Image($logo_path, 0, 1.3, 11.7, '', 'JPG', '', 'T', false, 300, '', false, false, 0 , false, false, false);
+
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->SetTextColor(0, 0, 0);
+
+        $text = 'Republic of the Philippines<br>';
+        $text .= 'Department of Environmental and Natural Resources<br>';
+        $text .= '<b>MINES AND GEOSCIENCES BUREAU</b><br>';
+        $text .= '<b>Regional Office No. X</b><br>';
+        $text .=  'DENR-X Compound, Puntod, Cagayan de Oro City';
+        
+        // (cell width, cell height, x-axis, y-axis, content, border, -, cell fill, placement)
+        $pdf->writeHTMLCell(11.7, 0, 0, 0.2, $text, 0, 1, 0, true, 'C');
+
+        // Body
+        $pdf->SetFont('helvetica', 'B', 16);
+        $pdf->SetTextColor(0, 0, 0);
+        $text = 'CERTIFICATE OF APPEARANCE LOG CY ' . strtoupper(date('F Y', strtotime($date_covered)));
+        
+        // (cell width, cell height, x-axis, y-axis, content, border, -, cell fill, placement)
+        $pdf->writeHTMLCell(11.7, 0, 0, 1.5, $text, 0, 1, 0, true, 'C');
+
+        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetXY(0.5, 2);
+        $tbl = '<table border="1" cellpadding="5">
+                    <thead>
+                        <tr style="text-align: center;">
+                            <th>Name</th>
+                            <th>Office</th>
+                            <th>Period of Visit</th>
+                            <th>Purpose</th>
+                            <th>Control Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>';
+
+        if($data->count() > 0) {
+            foreach($data as $details) {
+                if(is_null($details->date_from) && is_null($details->date_to)) {
+                    $date = '-';
+                } else {
+                    $start_date = date('m/d/Y', strtotime($details->date_from));
+                    $end_date = date('m/d/Y', strtotime($details->date_to));
+    
+                    $date = $start_date . " - " . $end_date;
+                }
+    
+                $tbl .= '<tr>
+                            <td>' . $details->fullname . '</td>
+                            <td>' . $details->company . '</td>
+                            <td>' . $date . '</td>
+                            <td>' . $details->purpose . '</td>
+                            <td>' . $details->serial_number . '</td>
+                        </tr>';
+            }
+        } else {
+            $tbl .= '<tr style="text-align: center;"><td colspan="5">No data available</td></tr>';
+        }
+                        
+        $tbl .= '</tbody>
+                </table>';
+
+        // Output the table on the PDF
+        $pdf->writeHTML($tbl, true, false, false, false, '');
 
         $pdfContent = $pdf->Output('sample.pdf', 'I');
         return $pdfContent;

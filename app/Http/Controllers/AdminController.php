@@ -94,6 +94,6 @@ class AdminController extends Controller
         // Retrieve data for summary printing
         $appearanceLogs = AppearancesLog::whereMonth('created_at', date('m', strtotime($request->query('date_covered'))))->get();
 
-        dd($appearanceLogs);
+        $this->pdfService->summaryReport($request->query('date_covered'), $appearanceLogs);
     }
 }
