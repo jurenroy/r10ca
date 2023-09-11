@@ -38,6 +38,9 @@ Route::prefix('admin')->middleware('auth')->group(function() {
     
     // Route for the graph data
     Route::get('/get-data', [AdminController::class, 'graphData'])->name('graph.data');
+
+    // Route for generating report
+    Route::get('/generate-report', [AdminController::class, 'generateReport'])->name('generate.report');
 });
 // End of Admin
 

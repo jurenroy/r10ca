@@ -27,10 +27,16 @@ class AdminController extends Controller
 
         return DataTables::of($logs)->addIndexColumn()
                                     ->addColumn('formatted_date', function ($model) {
-                                        $start_date = date('m/d/Y', strtotime($model->date_from));
-                                        $end_date = date('m/d/Y', strtotime($model->date_to));
+                                        
 
-                                        return $start_date . " - " . $end_date;
+                                        if(is_null($model->date_from) && is_null($model->date_to)) {
+                                            return '-';
+                                        } else {
+                                            $start_date = date('m/d/Y', strtotime($model->date_from));
+                                            $end_date = date('m/d/Y', strtotime($model->date_to));
+
+                                            return $start_date . " - " . $end_date;
+                                        }
                                     })
                                     ->addColumn('date_issued', function ($model) {
                                         return date('m/d/Y', strtotime($model->created_at));
@@ -80,5 +86,14 @@ class AdminController extends Controller
         ];
 
         return response()->json(['datasets' => $datasets, 'labels' => $labels]);
+    }
+
+    // Generate Report for printing summary
+    public function generateReport(Request $request) {
+        
+        // Retrieve data for summary printing
+        $appearanceLogs = AppearancesLog::whereMonth('created_at', date('m', strtotime($request->query('date_covered'))))->get();
+
+        dd($appearanceLogs);
     }
 }
