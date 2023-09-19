@@ -163,8 +163,8 @@ class PDFService
         $pdfContent = $this->generatePDF($logData);
 
         // Set recipient email
-        $recipientEmail = 'ftaran04@gmail.com';
-        // Mail::to($recipientEmail)->send(new MailHandler($pdfContent));
+        $recipientEmail = 'dadularubelen813@gmail.com';
+        Mail::to($recipientEmail)->send(new MailHandler($pdfContent));
 
         return "Welcome email sent successfully!";
     }
