@@ -62,7 +62,7 @@ class AdminController extends Controller
         $data = [];
         $monthColors = ['#0074E4', '#FF0066', '#33CC33','#FFD700', '#9933FF', '#FF9900', '#FF5050', '#3399FF', '#66CC99', '#FF6633', '#996699', '#00CC99'];
 
-        for ($i = 1; $i < 12; $i++) {
+        for ($i = 1; $i <= 12; $i++) {
             $month = date("F", mktime(0, 0, 0, $i, 1));
             $count = 0;
 

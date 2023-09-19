@@ -294,6 +294,12 @@ class PDFService
     public function summaryReport($date_covered, $data) {
         $pdf = $this->setup('L');
 
+        // Set custom margins
+        $pdf->SetMargins(0.5, 0.5, 0.5); // Left, top, right
+
+        // Set auto page breaks based on margins
+        $pdf->SetAutoPageBreak(true, 0.5); // Set the bottom margin for page break
+
         //Page Header
         $logo_path = base_path('public/images/mgb-logo-white.jpg');
         $pdf->Image($logo_path, 0.5, 0.2, 1, '', 'JPG', '', 'T', false, 300, '', false, false, 0 , false, false, false);
@@ -324,7 +330,7 @@ class PDFService
         // (cell width, cell height, x-axis, y-axis, content, border, -, cell fill, placement)
         $pdf->writeHTMLCell(11.7, 0, 0, 1.5, $text, 0, 1, 0, true, 'C');
 
-        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->SetFont('helvetica', 'B', 11);
         $pdf->SetXY(0.5, 2);
         $tbl = '<table border="1" cellpadding="5">
                     <thead>
@@ -365,7 +371,7 @@ class PDFService
                 </table>';
 
         // Output the table on the PDF
-        $pdf->writeHTML($tbl, true, false, false, false, '');
+        $pdf->writeHTML($tbl, true, false, true, false, '');
 
         $pdfContent = $pdf->Output('sample.pdf', 'I');
         return $pdfContent;
