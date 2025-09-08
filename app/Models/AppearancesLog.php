@@ -11,7 +11,24 @@ class AppearancesLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['serial_number', 'fullname', 'company', 'date_from', 'date_to', 'purpose'];
+    // Add the new fields to the $fillable array
+    protected $fillable = [
+        'serial_number',
+        'fullname',
+        'company',
+        'date_from',
+        'date_to',
+        'purpose',
+        'position', // New column
+        'accommodation_provided', // New column
+        'accommodation_remarks', // New column
+        'food_provided', // New column
+        'food_remarks', // New column
+        'transportation_provided', // New column
+        'transportation_remarks', // New column
+        'others_provided', // New column
+        'others_remarks', // New column
+    ];
 
     protected static function booted() {
         static::creating(function ($log) {
